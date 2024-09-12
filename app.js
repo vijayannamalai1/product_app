@@ -1,26 +1,22 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path'); // Required for serving static files
+const path = require('path');
 const app = express();
 const productRouter = require('./routes/productRouter');
 
-// Middleware
-app.use(cors()); // Enable Cross-Origin Resource Sharing
-app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files from the uploads directory
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes
 app.use('/api/v1/products', productRouter);
 
-// 404 Route
 app.use((req, res, next) => {
     res.status(404).send('Route not found');
 });
 
-// Global error handler (optional but recommended for handling unexpected errors)
 app.use((err, req, res, next) => {
-    console.error(err.stack); // Log the error stack trace for debugging
+    console.error(err.stack);
     res.status(500).send('Something went wrong!');
 });
 
